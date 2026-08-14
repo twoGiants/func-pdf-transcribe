@@ -1,0 +1,26 @@
+# $schema: https://raw.githubusercontent.com/knative/func/main/schema/func_yaml-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/knative/func/main/schema/func_yaml-schema.json
+specVersion: 0.36.0
+name: func-pdf-transcribe
+runtime: quarkus
+registry: image-registry.openshift-image-registry.svc:5000/demo
+namespace: demo
+created: 2026-08-14T11:13:32.370740845+02:00
+build:
+  buildEnvs:
+  - name: BP_NATIVE_IMAGE
+    value: "false"
+  - name: BP_JVM_VERSION
+    value: "21"
+  - name: MAVEN_S2I_ARTIFACT_DIRS
+    value: target/quarkus-app
+  - name: S2I_SOURCE_DEPLOYMENTS_FILTER
+    value: lib quarkus-run.jar app quarkus
+run:
+  envs:
+  - name: ANTHROPIC_VERTEX_PROJECT_ID
+    value: itpc-gcp-hcm-pe-eng-claude
+  - name: CLOUD_ML_REGION
+    value: us-east5
+  - name: GCP_CREDENTIALS
+    value: '{{ secret:pdf-transcribe-demo:google-adc }}'
